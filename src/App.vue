@@ -1,9 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { FAQSection } from '@oncekiller/vue-landing'
+</script>
 
 <template>
   <header></header>
 
-  <RouterView />
+  <FAQSection />
 </template>
 
 <style scoped></style>
