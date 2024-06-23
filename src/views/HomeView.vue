@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { HeroSection } from '@oncekiller/vue-landing'
+</script>
 
 <template>
-  <main></main>
+  <main>
+    <HeroSection />
+  </main>
 </template>
 
 <!-- Header

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { FAQSection } from '@oncekiller/vue-landing'
+import { CTASection, FAQSection } from '@oncekiller/vue-landing'
 </script>
 
 <template>
   <header></header>
 
+  <CTASection />
   <FAQSection />
 </template>
 
