@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { CTASection, FAQSection } from '@oncekiller/vue-landing'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header></header>
-
-  <CTASection />
-  <FAQSection />
+  <div>
+    <RouterView />
+  </div>
 </template>
 
 <style scoped></style>

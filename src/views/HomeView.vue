@@ -1,10 +1,23 @@
 <script setup lang="ts">
-import { HeroSection } from '@oncekiller/vue-landing'
+import { HeroSection, FeaturesSection } from '@oncekiller/vue-landing'
 </script>
 
 <template>
   <main>
-    <HeroSection />
+    <div>
+      <HeroSection
+        title="Build Stunning Landing Pages with Ease"
+        subtitle="Discover our powerful and customizable Vue.js component library"
+        :cta-buttons="[
+          {
+            name: 'browse',
+            label: 'Discover Components',
+            themeColor: 'secondary'
+          }
+        ]"
+      />
+    </div>
+    <!-- <FeaturesSection :features="[]" /> -->
   </main>
 </template>
 
