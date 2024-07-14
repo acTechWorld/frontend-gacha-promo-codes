@@ -4,29 +4,31 @@ import {
   FeaturesSection,
   SocialProofSection,
   CTASection,
-  FooterSection
+  PricingSectionCards
 } from '@oncekiller/vue-landing'
 </script>
 
 <template>
-  <main>
-    <div>
-      <HeroSection
-        video="https://assets-global.website-files.com/636496d3f0ebfdaba9784655/65288f5440e92ae64d88aa65_Untitled UI promo placeholder v2 (compressed)-transcode.mp4"
-        title="Build Stunning Landing Pages with Ease"
-        subtitle="Discover our powerful and customizable Vue.js component library"
-        :cta-buttons="[
-          {
-            name: 'browse',
-            label: 'Discover VueLanding',
-            themeColor: 'secondary'
-          }
-        ]"
-      />
-    </div>
+  <div>
+    <HeroSection
+      video="https://assets-global.website-files.com/636496d3f0ebfdaba9784655/65288f5440e92ae64d88aa65_Untitled UI promo placeholder v2 (compressed)-transcode.mp4"
+      title="Build Stunning Landing Pages with Ease"
+      subtitle="Discover our powerful and customizable Vue.js component library"
+      :cta-buttons="[
+        {
+          name: 'browse',
+          label: 'Discover VueLanding',
+          themeColor: 'secondary'
+        }
+      ]"
+    />
     <FeaturesSection
+      :style="{ paddingTop: '200px' }"
       title="What VueLanding can do for you ?"
       subtitle="VueLanding offers a comprehensive suite of modern, responsive, and customizable Vue.js components, enabling developers to build stunning landing pages with ease"
+      :content-width="1300"
+      bgColor="#fff"
+      color="#000"
       :features="[
         {
           label: 'Extensive Component Library',
@@ -38,7 +40,9 @@ import {
             'Ready to be integrated without efforts',
             'Open for customization if needed',
             'Using modern stack with Vue.js Typscript and Tailwind'
-          ]
+          ],
+          bgColor: '#f9fafb',
+          color: '#475467'
         },
         {
           label: 'High Customizability',
@@ -50,7 +54,9 @@ import {
             'Flexible props options',
             'Alternative versions of each components',
             'Compatible with tailwind theme'
-          ]
+          ],
+          bgColor: '#fff',
+          color: '#475467'
         },
         {
           label: 'Fast and Easy Integration',
@@ -62,11 +68,16 @@ import {
             'Integrated typescript component description',
             'Online storybook demo with examples',
             'High responsiveness for every screen size'
-          ]
+          ],
+          bgColor: '#f9fafb',
+          color: '#475467'
         }
       ]"
     />
     <SocialProofSection
+      :style="{ padding: '100px 0', width: '80%', margin: '0 auto' }"
+      bgColor="#fff"
+      color="#475467"
       :datas="[
         {
           imgProfile:
@@ -95,8 +106,9 @@ import {
       ]"
     />
     <CTASection
+      :style="{ padding: '100px 0' }"
       title="Ready to Build Stunning Landing Pages?"
-      subtitle="Get started with My Vue Landing Page Library today and elevate your web development with modern, responsive, and customizable components."
+      subtitle="Get started with VueLanding today or ask for a demo period if you want to test it"
       :cta-buttons="[
         {
           name: 'start',
@@ -110,7 +122,79 @@ import {
         }
       ]"
     />
-  </main>
+    <PricingSectionCards
+      :top-section="{
+        bgColor: '#f9fafb',
+        color: '#000',
+        title: 'Simple, transparent pricing',
+        subtitle: 'Pay once, use forever in unlimited projects. Free updates for life.'
+      }"
+      :bottom-section="{
+        bgColor: '#fff',
+        pricings: [
+          {
+            type: 'Demo plan',
+            description: 'Try the demo version of VueLanding for free',
+            amount: 0,
+            currency: '$',
+            color: '#475467',
+            bgColor: '#fff',
+            ctaButtons: [
+              {
+                name: 'getStarted',
+                label: 'Get started',
+                themeColor: 'tertiary'
+              }
+            ],
+            features: ['Access to all basic components for 7 days', 'Online documentation']
+          },
+          {
+            type: 'Single developer',
+            description: 'A single license for solo developers, freelancers',
+            amount: 99,
+            currency: '$',
+            color: '#475467',
+            bgColor: '#fff',
+            ctaButtons: [
+              {
+                name: 'getStarted',
+                label: 'Get started',
+                themeColor: 'tertiary'
+              }
+            ],
+            features: [
+              'Access to all components',
+              'Single user license',
+              'Online documentation',
+              'Free lifetime updates'
+            ]
+          },
+          {
+            type: 'Enterprise plan',
+            description: 'Unlimited access package, perfect for scaling your projects',
+            amount: 499,
+            currency: '$',
+            color: '#475467',
+            bgColor: '#fff',
+            ctaButtons: [
+              {
+                name: 'getStarted',
+                label: 'Get started',
+                themeColor: 'tertiary'
+              }
+            ],
+            features: [
+              'Access to all components',
+              'Unlimited user licenses',
+              'Online documentation',
+              'Free lifetime updates',
+              'Priority chat and email support'
+            ]
+          }
+        ]
+      }"
+    />
+  </div>
 </template>
 
 <!-- Header
