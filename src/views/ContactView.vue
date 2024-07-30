@@ -13,12 +13,32 @@ Office Location (Map) -->
       img="https://creatoom.com/wp-content/uploads/2023/12/scene-with-box-paper-mockups-v4-top-view-1024x683.jpg"
       bgColor="#fff"
       color="#475467"
+      @submit="handleSubmit"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ContactSection } from '@oncekiller/vue-landing'
+import utilsApiService from '@/services/utilsApiService'
+import { ContactSection } from '@vue-landing/vue-landing'
+
+//Methods
+const handleSubmit = (datas: {
+  email: string
+  firstname: string
+  lastname: string
+  companyName: string
+  message: string
+}) => {
+  console.log
+  utilsApiService.sendContactEmail({
+    email: datas.email,
+    firstName: datas.firstName,
+    lastName: datas.lastName,
+    companyName: datas.companyName,
+    message: datas.message
+  })
+}
 </script>
 
 <style scoped></style>

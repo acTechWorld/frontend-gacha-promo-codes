@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import {
-  HeroSection,
-  FeaturesSection,
-  SocialProofSection,
-  CTASection,
-  PricingSectionCards
-} from '@oncekiller/vue-landing'
+import router from '@/router'
+
+//Methods
+const handleClickPricing = (pricingId: string | number) => {
+  if (pricingId === 'demo') {
+    router.push({ name: 'demo' })
+  }
+}
 </script>
 
 <template>
   <div>
     <HeroSection
-      video="https://assets-global.website-files.com/636496d3f0ebfdaba9784655/65288f5440e92ae64d88aa65_Untitled UI promo placeholder v2 (compressed)-transcode.mp4"
+      video="hero_video.mp4"
       title="Build Stunning Landing Pages with Ease"
       subtitle="Discover our powerful and customizable Vue.js component library"
       :cta-buttons="[
@@ -33,8 +34,7 @@ import {
         {
           label: 'Extensive Component Library',
           description: 'A vast collection of pre-built components tailored for landing pages',
-          video:
-            'https://assets-global.website-files.com/636496d3f0ebfdaba9784655/65288f5440e92ae64d88aa65_Untitled UI promo placeholder v2 (compressed)-transcode.mp4',
+          video: 'feature_section1_video.mp4',
           featurePoints: [
             'Top used components for every part of your landing pages',
             'Ready to be integrated without efforts',
@@ -47,8 +47,7 @@ import {
         {
           label: 'High Customizability',
           description: 'Easily customize each component to match your brand’s style and design',
-          video:
-            'https://assets-global.website-files.com/636496d3f0ebfdaba9784655/65288f5440e92ae64d88aa65_Untitled UI promo placeholder v2 (compressed)-transcode.mp4',
+          video: 'feature_section3_video.mov',
 
           featurePoints: [
             'Flexible props options',
@@ -61,8 +60,7 @@ import {
         {
           label: 'Fast and Easy Integration',
           description: 'Simple and straightforward integration into any Vue.js project',
-          video:
-            'https://assets-global.website-files.com/636496d3f0ebfdaba9784655/65288f5440e92ae64d88aa65_Untitled UI promo placeholder v2 (compressed)-transcode.mp4',
+          video: 'feature_section3_video.mov',
           featurePoints: [
             'Detailed documentation',
             'Integrated typescript component description',
@@ -123,6 +121,8 @@ import {
       ]"
     />
     <PricingSectionCards
+      @click-pricing-cta-button="({ pricingId }) => handleClickPricing(pricingId)"
+      @click-pricing="handleClickPricing"
       :top-section="{
         bgColor: '#f9fafb',
         color: '#000',
@@ -133,6 +133,7 @@ import {
         bgColor: '#fff',
         pricings: [
           {
+            id: 'demo',
             type: 'Demo plan',
             description: 'Try the demo version of VueLanding for free',
             amount: 0,
@@ -149,12 +150,15 @@ import {
             features: ['Access to all basic components for 7 days', 'Online documentation']
           },
           {
+            id: 'single',
             type: 'Single developer',
             description: 'A single license for solo developers, freelancers',
             amount: 99,
             currency: '$',
             color: '#475467',
             bgColor: '#fff',
+            disabled: true,
+            disabledText: 'Not available temporarily',
             ctaButtons: [
               {
                 name: 'getStarted',
@@ -170,12 +174,15 @@ import {
             ]
           },
           {
+            id: 'enterprise',
             type: 'Enterprise plan',
             description: 'Unlimited access package, perfect for scaling your projects',
             amount: 499,
             currency: '$',
             color: '#475467',
             bgColor: '#fff',
+            disabled: true,
+            disabledText: 'Not available temporarily',
             ctaButtons: [
               {
                 name: 'getStarted',

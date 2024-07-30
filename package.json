@@ -14,7 +14,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@oncekiller/vue-landing": "0.0.2-beta.52",
+    "@vue-landing/vue-landing": "^0.0.3-beta.13",
+    "axios": "^1.7.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"

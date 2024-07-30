@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { HeaderSection, FooterSection } from '@oncekiller/vue-landing'
 import router from './router'
 const handleClickItem = (item: { category?: string; page: string }) => {
   router.push({ name: item.page })

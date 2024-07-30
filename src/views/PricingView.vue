@@ -20,6 +20,7 @@ Payment Methods Section
 <template>
   <div>
     <PricingSectionTable
+      @clickPricing="handleClickPricing"
       :topSection="{
         title: 'Simple, transparent pricing',
         subtitle: 'Pay once, use forever in unlimited projects. Free updates for life.'
@@ -49,6 +50,8 @@ Payment Methods Section
             amount: 99,
             currency: '$',
             color: '#475467',
+            disabled: true,
+            disabledText: 'Not available temporarily',
             bgColor: '#fff',
             ctaButton: {
               name: 'getStarted',
@@ -62,6 +65,8 @@ Payment Methods Section
             description: 'Unlimited access package, perfect for scaling your projects',
             amount: 499,
             currency: '$',
+            disabled: true,
+            disabledText: 'Not available temporarily',
             color: '#475467',
             bgColor: '#fff',
             ctaButton: {
@@ -154,5 +159,11 @@ Payment Methods Section
 </template>
 
 <script setup lang="ts">
-import { PricingSectionTable } from '@oncekiller/vue-landing'
+import router from '@/router'
+//Methods
+const handleClickPricing = (pricingId: string | number) => {
+  if (pricingId === 'demo') {
+    router.push({ name: 'demo' })
+  }
+}
 </script>
