@@ -1,5 +1,5 @@
 // src/services/apiService.js
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 // Access the base URL from environment variables
 const baseURL = import.meta.env.VITE_UTILS_API_BASED_URL
@@ -105,22 +105,37 @@ const sendContactEmail = async ({
   companyName: string
   message: string
 }) => {
-  await utilsApiClient.post('/email/send-contact-email', {
-    source: 'vueLanding',
-    email: email,
-    firstname: firstName,
-    lastname: lastName,
-    companyName: companyName,
-    message: message
-  })
+  try {
+    await utilsApiClient.post('/email/send-contact-email', {
+      source: 'vueLanding',
+      email: email,
+      firstname: firstName,
+      lastname: lastName,
+      companyName: companyName,
+      message: message
+    })
+    return true
+  } catch (error) {
+    return false
+  }
 }
 
 const sendDemoKeyEmail = async ({ email, firstName }: { email: string; firstName: string }) => {
-  await utilsApiClient.post('/email/send-licencing-key-email', {
-    source: 'vueLanding',
-    email: email,
-    firstname: firstName,
-    duration: 604800000 // a week
-  })
+  try {
+    await utilsApiClient.post('/email/send-licencing-key-email', {
+      source: 'vueLanding',
+      email: email,
+      firstname: firstName,
+      // duration: 604800000 // a week
+      duration: 10000 // a week
+    })
+    return true
+  } catch (error: any) {
+    if (error.response?.status === 405) {
+      return 'You already have a valid licence key, you cannot have a new one'
+    } else {
+      return 'An error occurred while sending your message, please try again'
+    }
+  }
 }
 export default { sendContactEmail, sendDemoKeyEmail }
