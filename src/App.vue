@@ -27,6 +27,7 @@ const handleClickItem = (item: { category?: string; page: string }) => {
       company-logo="logo_icon.png"
       company-name="VueLanding"
       @click-page="handleClickItem"
+      @click-logo="handleClickItem({ page: 'home' })"
     />
     <RouterView />
     <FooterSection
