@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router'
 import router from './router'
 const handleClickItem = (item: { category?: string; page: string }) => {
   if (item.page === 'onlineDocumentation') {
-    window.location.href = 'http://storybook.vuelanding.com/'
+    window.location.href = 'https://storybook.vuelanding.com/'
   } else {
     router.push({ name: item.page })
   }
