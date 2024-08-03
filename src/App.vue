@@ -2,7 +2,11 @@
 import { RouterView } from 'vue-router'
 import router from './router'
 const handleClickItem = (item: { category?: string; page: string }) => {
-  router.push({ name: item.page })
+  if (item.page === 'onlineDocumentation') {
+    window.location.href = 'http://storybook.vuelanding.com/'
+  } else {
+    router.push({ name: item.page })
+  }
 }
 </script>
 
@@ -28,7 +32,7 @@ const handleClickItem = (item: { category?: string; page: string }) => {
         },
         { name: 'contact', label: 'Contact' }
       ]"
-      company-logo="logo_icon.png"
+      company-logo="http://vuelanding.com/logo_icon.png"
       company-name="VueLanding"
       @click-page="handleClickItem"
       @click-logo="handleClickItem({ page: 'home' })"
@@ -36,6 +40,7 @@ const handleClickItem = (item: { category?: string; page: string }) => {
     <RouterView />
     <FooterSection
       :inner-width="1500"
+      @click-page="handleClickItem"
       :top-section="{
         text: 'Build Stunning Landing Pages with Ease',
         companyLogo: 'logo_icon.png',
@@ -47,8 +52,8 @@ const handleClickItem = (item: { category?: string; page: string }) => {
             { name: 'contact', label: 'Contact' }
           ],
           Ressources: [
-            { name: 'components', label: 'Components' },
-            { name: 'onlineDocumentation', label: 'Online documentation' },
+            { name: 'docInstall', label: 'Installation guide', icon: 'arrow-right' },
+            { name: 'onlineDocumentation', label: 'Online components documentation' },
             { name: 'liveDemo', label: 'Live demo' }
           ]
         }
