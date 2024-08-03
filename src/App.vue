@@ -17,8 +17,12 @@ const handleClickItem = (item: { category?: string; page: string }) => {
           category: 'Ressources',
           large: true,
           subMenuItems: [
-            { name: 'components', label: 'Components', icon: 'arrow-right' },
-            { name: 'onlineDocumentation', label: 'Online documentation', icon: 'arrow-right' },
+            { name: 'docInstall', label: 'Installation guide', icon: 'arrow-right' },
+            {
+              name: 'onlineDocumentation',
+              label: 'Online components documentation',
+              icon: 'arrow-right'
+            },
             { name: 'liveDemo', label: 'Live demo', icon: 'arrow-right' }
           ]
         },

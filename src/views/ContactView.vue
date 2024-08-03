@@ -13,7 +13,15 @@ Office Location (Map) -->
     ref="toast"
     :style="{ width: '400px' }"
   />
-  <div :style="{ minHeight: '100vh', paddingTop: '100px', maxWidth: '1600px', margin: '0 auto' }">
+  <div
+    :style="{
+      minHeight: '100vh',
+      paddingTop: '100px',
+      paddingBottom: '100px',
+      maxWidth: '1600px',
+      margin: '0 auto'
+    }"
+  >
     <ContactSection
       title="Get in touch"
       subtitle="Our friendly team would love to answer your questions"
