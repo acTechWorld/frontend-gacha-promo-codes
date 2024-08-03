@@ -32,7 +32,7 @@ const handleClickItem = (item: { category?: string; page: string }) => {
         },
         { name: 'contact', label: 'Contact' }
       ]"
-      company-logo="http://vuelanding.com/logo_icon.png"
+      company-logo="https://vuelanding.com/logo_icon.png"
       company-name="VueLanding"
       @click-page="handleClickItem"
       @click-logo="handleClickItem({ page: 'home' })"

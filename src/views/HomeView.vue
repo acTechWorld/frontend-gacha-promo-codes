@@ -12,7 +12,7 @@ const handleClickPricing = (pricingId: string | number) => {
 <template>
   <div>
     <HeroSection
-      video="http://vuelanding.com/hero_video.mp4"
+      video="https://vuelanding.com/hero_video.mp4"
       title="Build Stunning Landing Pages with Ease"
       subtitle="Discover our powerful and customizable Vue.js component library"
       :cta-buttons="[
@@ -34,7 +34,7 @@ const handleClickPricing = (pricingId: string | number) => {
         {
           label: 'Extensive Component Library',
           description: 'A vast collection of pre-built components tailored for landing pages',
-          video: 'http://vuelanding.com/feature_section1_video.mp4',
+          video: 'https://vuelanding.com/feature_section1_video.mp4',
           featurePoints: [
             'Top used components for every part of your landing pages',
             'Ready to be integrated without efforts',
@@ -47,7 +47,7 @@ const handleClickPricing = (pricingId: string | number) => {
         {
           label: 'High Customizability',
           description: 'Easily customize each component to match your brand’s style and design',
-          video: 'http://vuelanding.com/feature_section3_video.mov',
+          video: 'https://vuelanding.com/feature_section3_video.mov',
 
           featurePoints: [
             'Flexible props options',
@@ -60,7 +60,7 @@ const handleClickPricing = (pricingId: string | number) => {
         {
           label: 'Fast and Easy Integration',
           description: 'Simple and straightforward integration into any Vue.js project',
-          video: 'http://vuelanding.com/feature_section3_video.mov',
+          video: 'https://vuelanding.com/feature_section3_video.mov',
           featurePoints: [
             'Detailed documentation',
             'Integrated typescript component description',
