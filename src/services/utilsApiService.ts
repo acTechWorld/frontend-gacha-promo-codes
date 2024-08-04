@@ -1,5 +1,6 @@
 // src/services/apiService.js
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
+import CryptoJS from 'crypto-js'
 
 // Access the base URL from environment variables
 const baseURL = import.meta.env.VITE_UTILS_API_BASED_URL
@@ -15,10 +16,19 @@ const utilsApiClient = axios.create({
   }
 })
 
+// Function to encrypt the password
+const encrypt = (value: string) => {
+  const expiredAt = Date.now() + 1 * 60 * 1000
+  return CryptoJS.AES.encrypt(
+    JSON.stringify({ value: value, expiredAt: expiredAt }),
+    import.meta.env.VITE_UTILS_API_SECRET_KEY
+  ).toString()
+}
+
 const refreshToken = async () => {
   const response = await utilsApiClient.post('/user/login', {
-    login: import.meta.env.VITE_UTILS_API_LOGIN,
-    password: import.meta.env.VITE_UTILS_API_PASSWORD
+    loginEncrypted: encrypt(import.meta.env.VITE_UTILS_API_LOGIN),
+    passwordEncrypted: encrypt(import.meta.env.VITE_UTILS_API_PASSWORD)
   })
   localStorage.setItem('accessToken', response.data.token)
   return response.data.token
