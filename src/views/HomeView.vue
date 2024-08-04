@@ -1,11 +1,29 @@
 <script setup lang="ts">
 import router from '@/router'
+import { ref } from 'vue'
+
+const featuresSection = ref(null)
 
 //Methods
 const handleClickPricing = (pricingId: string | number) => {
   if (pricingId === 'demo') {
     router.push({ name: 'demo' })
   }
+}
+const handleClickCTASection = (buttonId: string) => {
+  if (buttonId === 'demo') {
+    router.push({ name: 'demo' })
+  } else {
+    router.push({ name: 'pricing' })
+  }
+}
+const handleClickCtaHero = () => {
+  const top = featuresSection.value?.$el?.offsetTop || 0
+  window.scrollTo({
+    top: top,
+    left: 0,
+    behavior: 'smooth'
+  })
 }
 </script>
 
@@ -22,8 +40,10 @@ const handleClickPricing = (pricingId: string | number) => {
           themeColor: 'secondary'
         }
       ]"
+      @clickCtaButton="handleClickCtaHero"
     />
     <FeaturesSection
+      ref="featuresSection"
       :style="{ paddingTop: '200px' }"
       title="What VueLanding can do for you ?"
       subtitle="VueLanding offers a comprehensive suite of modern, responsive, and customizable Vue.js components, enabling developers to build stunning landing pages with ease"
@@ -119,6 +139,7 @@ const handleClickPricing = (pricingId: string | number) => {
           themeColor: 'secondary'
         }
       ]"
+      @clickCtaButton="handleClickCTASection"
     />
     <PricingSectionCards
       @click-pricing-cta-button="({ pricingId }) => handleClickPricing(pricingId)"
