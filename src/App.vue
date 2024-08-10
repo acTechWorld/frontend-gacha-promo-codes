@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import service from './services/utilsApiService'
-import { useRouteQuery } from '@vueuse/router'
 import { useStorage } from '@vueuse/core'
 import AddCodeForm from '@/components/AddCodeForm.vue'
 import type { Code } from './type/type'
@@ -11,7 +10,9 @@ type Storage = { promoCodeId: number; variation: string }
 let timeoutCopy: boolean | number = false
 const VOTED_CODES_KEY = 'votedPromoCodes'
 
-const application = useRouteQuery('application')
+const application = import.meta.env.VITE_APPLICATION
+
+console.log(application)
 const listSessionVote: Ref<Storage[]> = useStorage(VOTED_CODES_KEY, [])
 
 const mappingApplications = {
@@ -30,9 +31,7 @@ const codeHover = ref()
 onMounted(() => getCodes())
 
 //COMPUTED
-const appInfos = computed(
-  () => application.value && mappingApplications[application.value?.toString()]
-)
+const appInfos = computed(() => application && mappingApplications[application.toString()])
 
 const appStyle = computed(() => {
   return {
@@ -109,8 +108,8 @@ const handlClickThumb = async (promoCode: Code, variation: 'plus' | 'minus') => 
 }
 
 const getCodes = async () => {
-  if (application.value) {
-    const data = await service.getAllPromoCodesFromApplication(application.value?.toString() ?? '')
+  if (application) {
+    const data = await service.getAllPromoCodesFromApplication(application?.toString() ?? '')
     codes.value = data ?? []
   }
 }
@@ -118,7 +117,7 @@ const getCodes = async () => {
 //WATCH
 
 watch(
-  () => application.value,
+  () => application,
   async () => {
     await getCodes()
   }
