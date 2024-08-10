@@ -1,16 +1,26 @@
 // src/services/apiService.js
+import type { Code } from '@/type/type'
 import axios from 'axios'
 import CryptoJS from 'crypto-js'
 
 // Access the base URL from environment variables
-const baseURL = import.meta.env.VITE_UTILS_API_BASED_URL
+const baseURLUtilsApi = import.meta.env.VITE_UTILS_API_BASED_URL
+const baseURLGatchApi = import.meta.env.VITE_GATCHA_API_BASED_URL
 // Function to refresh the token
 let isRefreshing = false
 let failedQueue: any[] = []
 
 // Create an instance of axios
 const utilsApiClient = axios.create({
-  baseURL, // Use the base URL from the environment variable
+  baseURL: baseURLUtilsApi, // Use the base URL from the environment variable
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+// Create an instance of axios
+const gatchaApiClient = axios.create({
+  baseURL: baseURLGatchApi, // Use the base URL from the environment variable
   headers: {
     'Content-Type': 'application/json'
   }
@@ -47,7 +57,7 @@ const processQueue = (error: any, token = null) => {
 }
 
 // Axios request interceptor
-utilsApiClient.interceptors.request.use(
+gatchaApiClient.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('accessToken')
     if (token) {
@@ -60,7 +70,7 @@ utilsApiClient.interceptors.request.use(
   }
 )
 
-utilsApiClient.interceptors.response.use(
+gatchaApiClient.interceptors.response.use(
   (response) => {
     return response
   },
@@ -86,10 +96,10 @@ utilsApiClient.interceptors.response.use(
 
       try {
         const newToken = await refreshToken()
-        utilsApiClient.defaults.headers['Authorization'] = 'Bearer ' + newToken
+        gatchaApiClient.defaults.headers['Authorization'] = 'Bearer ' + newToken
         originalRequest.headers['Authorization'] = 'Bearer ' + newToken
         processQueue(null, newToken)
-        return utilsApiClient(originalRequest)
+        return gatchaApiClient(originalRequest)
       } catch (err) {
         processQueue(err, null)
         return Promise.reject(err)
@@ -102,50 +112,32 @@ utilsApiClient.interceptors.response.use(
   }
 )
 
-const sendContactEmail = async ({
-  email,
-  firstName,
-  lastName,
-  companyName,
-  message
-}: {
-  email: string
-  firstName: string
-  lastName: string
-  companyName: string
-  message: string
-}) => {
+const getAllPromoCodesFromApplication = async (application: string) => {
   try {
-    await utilsApiClient.post('/email/send-contact-email', {
-      source: 'vueLanding',
-      email: email,
-      firstname: firstName,
-      lastname: lastName,
-      companyName: companyName,
-      message: message
-    })
-    return true
+    const { data } = await gatchaApiClient.get(`/promo-codes/application/${application}`)
+    return data
   } catch (error) {
-    return false
+    console.warn(`ERROR getAllPromoCodesFromApplication ${error}`)
   }
 }
 
-const sendDemoKeyEmail = async ({ email, firstName }: { email: string; firstName: string }) => {
+export const createPromoCode = async (params: Code, application: string) => {
+  const { code, status, awardDescription, awardDetails, downVote, upVote } = params
   try {
-    await utilsApiClient.post('/email/send-licencing-key-email', {
-      source: 'vueLanding',
-      email: email,
-      firstname: firstName,
-      // duration: 604800000 // a week
-      duration: 10000 // a week
+    const { data } = await gatchaApiClient.post(`/promo-codes`, {
+      code,
+      application,
+      status,
+      awardDescription,
+      upVote,
+      downVote,
+      awardDetails
     })
-    return true
-  } catch (error: any) {
-    if (error.response?.status === 405) {
-      return 'You already have a valid licence key, you cannot have a new one'
-    } else {
-      return 'An error occurred while sending your message, please try again'
-    }
+    return data
+  } catch (error) {
+    console.warn(`ERROR getAllPromoCodesFromApplication ${error}`)
+    throw error
   }
 }
-export default { sendContactEmail, sendDemoKeyEmail }
+
+export default { getAllPromoCodesFromApplication, createPromoCode }
