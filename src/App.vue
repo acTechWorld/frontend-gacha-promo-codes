@@ -129,6 +129,7 @@ watch(
   <div v-if="appInfos" :style="appStyle" class="h-screen p-5 w-full pt-[100px] overflow-scroll">
     <AddCodeForm
       v-if="displayAddCodeForm"
+      :application="application?.toString()"
       class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
       @close="displayAddCodeForm = false"
     />

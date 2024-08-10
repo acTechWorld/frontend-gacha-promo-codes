@@ -91,10 +91,17 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import service from '@/services/utilsApiService'
+
+const props = withDefaults(
+  defineProps<{
+    application: string
+  }>(),
+  { application: 'summonerWar' }
+)
 
 const promoCode = ref({
   code: '',
@@ -110,25 +117,23 @@ const addDetail = () => {
   awardDetails.value.push({ label: '', count: 0 })
 }
 
-const removeDetail = (index) => {
+const removeDetail = (index: number) => {
   awardDetails.value.splice(index, 1)
 }
 
 const submitForm = async () => {
   try {
-    await service.createPromoCode(
-      {
-        ...promoCode.value,
-        upVote: 0,
-        downVote: 0,
-        awardDetails: awardDetails.value.filter((item) => item.label)
-      },
-      'summonerWar'
-    )
+    const res = await service.createPromoCode({
+      ...promoCode.value,
+      upVote: 0,
+      downVote: 0,
+      awardDetails: awardDetails.value.filter((item) => item.label),
+      application: props.application
+    })
 
     // Reset form
     promoCode.value.code = ''
-    promoCode.value.description = ''
+    promoCode.value.awardDescription = ''
     awardDetails.value = [{ label: '', count: 0 }]
     promoCode.value.status = 'active'
 
