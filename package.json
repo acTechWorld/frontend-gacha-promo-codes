@@ -19,6 +19,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@vueuse/core": "^10.11.1",
     "@vueuse/router": "^10.11.1",
     "axios": "^1.7.2",
     "crypto-js": "^4.2.0",

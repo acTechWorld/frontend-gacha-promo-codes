@@ -2,9 +2,17 @@
 import { computed, onMounted, ref, watch, type Ref } from 'vue'
 import service from './services/utilsApiService'
 import { useRouteQuery } from '@vueuse/router'
+import { useStorage } from '@vueuse/core'
 import AddCodeForm from '@/components/AddCodeForm.vue'
 import type { Code } from './type/type'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+type Storage = { promoCodeId: number; variation: string }
+let timeoutCopy: boolean | number = false
+const VOTED_CODES_KEY = 'votedPromoCodes'
+
 const application = useRouteQuery('application')
+const listSessionVote: Ref<Storage[]> = useStorage(VOTED_CODES_KEY, [])
 
 const mappingApplications = {
   summonerWar: {
@@ -16,6 +24,8 @@ const mappingApplications = {
 
 const codes: Ref<Code[]> = ref([])
 const displayAddCodeForm = ref(false)
+const isCopied = ref()
+const codeHover = ref()
 
 onMounted(() => getCodes())
 
@@ -34,6 +44,68 @@ const appStyle = computed(() => {
 //METHODS
 const handleClickAddCode = () => {
   displayAddCodeForm.value = true
+}
+
+const handleClickCopy = async (code: Code) => {
+  try {
+    await navigator.clipboard.writeText(code.code)
+    if (timeoutCopy) clearTimeout(timeoutCopy)
+    isCopied.value = code.id
+    timeoutCopy = setTimeout(() => {
+      isCopied.value = undefined
+    }, 2000) // Reset after 2 seconds
+  } catch (error) {
+    console.error('Failed to copy text:', error)
+  }
+}
+
+const handlClickThumb = async (promoCode: Code, variation: 'plus' | 'minus') => {
+  if (promoCode.id) {
+    const alreadyVotedIdx = listSessionVote.value.findIndex(
+      (vote: Storage) => vote.promoCodeId === promoCode.id
+    )
+    let numberUpvote = 0
+    let numberDownvote = 0
+    if (alreadyVotedIdx === -1) {
+      listSessionVote.value.push({ promoCodeId: promoCode.id, variation })
+      numberUpvote = variation === 'plus' ? 1 : 0
+      numberDownvote = variation === 'plus' ? 0 : 1
+    } else {
+      //If same variation we clicked on the button for unselect
+      if (listSessionVote.value[alreadyVotedIdx].variation === variation) {
+        listSessionVote.value = listSessionVote.value.splice(alreadyVotedIdx, alreadyVotedIdx)
+        numberUpvote = variation === 'plus' ? -1 : 0
+        numberDownvote = variation === 'plus' ? 0 : -1
+      } else {
+        //Else we change the variation
+        listSessionVote.value[alreadyVotedIdx] = { promoCodeId: promoCode.id, variation }
+        numberUpvote = variation === 'plus' ? 1 : -1
+        numberDownvote = variation === 'plus' ? -1 : 1
+      }
+    }
+    //Update count on front size to not make getAll code
+    codes.value = codes.value.map((code) => {
+      if (code.id && code.id === promoCode.id) {
+        return {
+          ...code,
+          upVote: code.upVote + numberUpvote,
+          downVote: code.downVote + numberDownvote
+        }
+      } else {
+        return code
+      }
+    })
+
+    //Update db
+    await service.updatePromoCode(
+      {
+        ...promoCode,
+        upVote: promoCode.upVote + numberUpvote,
+        downVote: promoCode.downVote + numberDownvote
+      },
+      promoCode.id
+    )
+  }
 }
 
 const getCodes = async () => {
@@ -86,19 +158,45 @@ watch(
                 v-for="(code, idxCode) in codes"
                 :key="`code_${idxCode}`"
                 class="[&>td]:px-3 [&>td]:py-2 [&>td]:h-full text-left"
+                :class="{ 'bg-[#2e2e5fdf]': codeHover === code.id }"
               >
-                <td class="w-[200px]">{{ code.code }}</td>
+                <td
+                  class="w-[200px] cursor-pointer relative"
+                  @mouseenter="codeHover = code.id"
+                  @mouseleave="codeHover = undefined"
+                  @click="handleClickCopy(code)"
+                >
+                  <div class="flex items-center">
+                    <FontAwesomeIcon
+                      :icon="['fas', code.status === 'active' ? 'check' : 'ban']"
+                      :class="code.status === 'active' ? 'text-green-500' : 'text-red-500'"
+                    />
+                    <span
+                      class="ml-2 max-w-[120px] break-all overflow-hidden line-clamp-3"
+                      :class="{ 'text-green-500': isCopied === code.id }"
+                    >
+                      {{ isCopied === code.id ? 'Copied!' : code.code }}
+                    </span>
+                    <FontAwesomeIcon
+                      size="lg"
+                      class="ml-3 absolute right-4"
+                      v-if="code.status === 'active'"
+                      :icon="['fas', 'copy']"
+                      :class="isCopied === code.id ? 'text-green-500' : ''"
+                    />
+                  </div>
+                </td>
                 <td>
                   <span v-if="code.awardDescription">
                     {{ code.awardDescription }}
                   </span>
-                  <ul v-if="code.awardDetails?.length > 0">
+                  <ul v-if="code.awardDetails?.length > 0" class="mt-2">
                     <li
                       v-for="(awardDetail, idxAward) in code.awardDetails"
                       :key="`code_${idxCode}_awardDetail_${idxAward}`"
                     >
-                      <span>{{ awardDetail.label }}</span>
-                      <span>x{{ awardDetail.count }}</span>
+                      <span>- {{ awardDetail.label }}</span>
+                      <span> x{{ awardDetail.count }}</span>
                     </li>
                   </ul>
                 </td>
@@ -106,14 +204,34 @@ watch(
                   <div class="flex items-center gap-5 justify-center">
                     <div class="flex flex-col gap-2">
                       <FontAwesomeIcon
-                        class="cursor-pointer"
+                        class="cursor-pointer text-green-500"
                         size="xl"
-                        :icon="['far', 'thumbs-up']"
+                        :icon="[
+                          listSessionVote.findIndex(
+                            (sessionVote: Storage) =>
+                              sessionVote.promoCodeId === code.id &&
+                              sessionVote.variation === 'plus'
+                          ) === -1
+                            ? 'far'
+                            : 'fas',
+                          'thumbs-up'
+                        ]"
+                        @click="handlClickThumb(code, 'plus')"
                       />
                       <FontAwesomeIcon
-                        class="cursor-pointer"
+                        class="cursor-pointer text-red-500"
                         size="xl"
-                        :icon="['far', 'thumbs-down']"
+                        :icon="[
+                          listSessionVote.findIndex(
+                            (sessionVote: Storage) =>
+                              sessionVote.promoCodeId === code.id &&
+                              sessionVote.variation === 'minus'
+                          ) === -1
+                            ? 'far'
+                            : 'fas',
+                          'thumbs-down'
+                        ]"
+                        @click="handlClickThumb(code, 'minus')"
                       />
                     </div>
                     <div

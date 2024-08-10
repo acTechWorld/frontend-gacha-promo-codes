@@ -3,6 +3,7 @@ export type AwardDetails = {
   count: number
 }
 export type Code = {
+  id?: number
   code: string
   status: 'active' | 'inactive'
   awardDescription: string

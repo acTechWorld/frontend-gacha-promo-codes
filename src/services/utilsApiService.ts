@@ -121,10 +121,10 @@ const getAllPromoCodesFromApplication = async (application: string) => {
   }
 }
 
-export const createPromoCode = async (params: Code, application: string) => {
-  const { code, status, awardDescription, awardDetails, downVote, upVote } = params
+export const createPromoCode = async (params: any) => {
+  const { code, status, awardDescription, awardDetails, downVote, upVote, application } = params
   try {
-    const { data } = await gatchaApiClient.post(`/promo-codes`, {
+    await gatchaApiClient.post(`/promo-codes`, {
       code,
       application,
       status,
@@ -133,11 +133,30 @@ export const createPromoCode = async (params: Code, application: string) => {
       downVote,
       awardDetails
     })
-    return data
+    return true
   } catch (error) {
-    console.warn(`ERROR getAllPromoCodesFromApplication ${error}`)
-    throw error
+    console.warn(`ERROR createPromoCode ${error}`)
+    return false
   }
 }
 
-export default { getAllPromoCodesFromApplication, createPromoCode }
+export const updatePromoCode = async (params: any, promoCodeId: number) => {
+  const { code, status, awardDescription, awardDetails, downVote, upVote, application } = params
+  try {
+    await gatchaApiClient.put(`/promo-codes/${promoCodeId}`, {
+      code,
+      application,
+      status,
+      awardDescription,
+      upVote,
+      downVote,
+      awardDetails
+    })
+    return true
+  } catch (error) {
+    console.warn(`ERROR updatePromoCode ${error}`)
+    return false
+  }
+}
+
+export default { getAllPromoCodesFromApplication, createPromoCode, updatePromoCode }
