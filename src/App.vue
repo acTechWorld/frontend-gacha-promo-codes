@@ -5,6 +5,7 @@ import { useStorage } from '@vueuse/core'
 import AddCodeForm from '@/components/AddCodeForm.vue'
 import type { Code } from './type/type'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useI18n } from 'vue-i18n'
 
 type Storage = { promoCodeId: number; variation: string }
 let timeoutCopy: boolean | number = false
@@ -12,8 +13,8 @@ const VOTED_CODES_KEY = 'votedPromoCodes'
 
 const application = import.meta.env.VITE_APPLICATION
 
-console.log(application)
 const listSessionVote: Ref<Storage[]> = useStorage(VOTED_CODES_KEY, [])
+const { t, locale } = useI18n()
 
 const mappingApplications = {
   summonerWar: {
@@ -114,6 +115,11 @@ const getCodes = async () => {
   }
 }
 
+const changeLocale = (event: Event) => {
+  const target = event.target as HTMLSelectElement
+  locale.value = target.value
+}
+
 //WATCH
 
 watch(
@@ -132,6 +138,13 @@ watch(
       class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
       @close="displayAddCodeForm = false"
     />
+    <select v-model="locale" @change="changeLocale">
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+      <option value="cn">中文</option>
+      <option value="ja">日本語</option>
+    </select>
     <div class="mx-auto max-w-[1200px] w-full flex flex-col gap-20 text-white">
       <div class="appInfos text-center flex flex-col gap-2">
         <div class="font-semibold text-4xl">{{ appInfos.gameTitle }}</div>
@@ -142,15 +155,15 @@ watch(
           @click="handleClickAddCode"
           class="text-sm flex ml-auto rounded bg-gray-50 px-2 py-1 text-[#2e2e5f] cursor-pointer hover:bg-gray-200"
         >
-          Ajouter un nouveau Code
+          {{ t('addNewCodeButton') }}
         </button>
         <div v-if="codes && codes.length > 0">
           <table class="w-full bg-[#2e2e5fbf] [&_th]:border [&_td]:border">
             <thead>
               <tr class="[&>th]:px-3 [&>th]:py-2 text-left">
-                <th>Code</th>
-                <th>Awards</th>
-                <th class="text-center">Vote</th>
+                <th>{{ t('code') }}</th>
+                <th>{{ t('awards') }}</th>
+                <th class="text-center">{{ t('vote') }}</th>
               </tr>
             </thead>
             <tbody>

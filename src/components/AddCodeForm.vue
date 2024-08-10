@@ -8,10 +8,12 @@
         @click="closeForm"
       />
 
-      <h2 class="text-2xl font-semibold mb-4 text-center">Add New Promo Code</h2>
+      <h2 class="text-2xl font-semibold mb-4 text-center">{{ t('addNewCodeTitle') }}</h2>
       <form @submit.prevent="submitForm" class="space-y-4 max-h-[65vh] overflow-y-auto">
         <div>
-          <label for="promoCode" class="block text-sm font-medium text-gray-700">Promo Code</label>
+          <label for="promoCode" class="block text-sm font-medium text-gray-700">
+            {{ t('promoCodeField') }}
+          </label>
           <input
             v-model="promoCode.code"
             id="promoCode"
@@ -21,9 +23,9 @@
         </div>
 
         <div>
-          <label for="awardDescription" class="block text-sm font-medium text-gray-700"
-            >Award Description</label
-          >
+          <label for="awardDescription" class="block text-sm font-medium text-gray-700">
+            {{ t('awardDescriptionField') }}
+          </label>
           <input
             v-model="promoCode.awardDescription"
             id="awardDescription"
@@ -33,7 +35,9 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700">Award Details</label>
+          <label class="block text-sm font-medium text-gray-700">
+            {{ t('awardDetailsField') }}
+          </label>
           <div
             v-for="(detail, index) in awardDetails"
             :key="index"
@@ -63,20 +67,22 @@
             @click="addDetail"
             class="mt-3 w-fit inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
           >
-            Add Detail
+            {{ t('addDetailButton') }}
           </button>
         </div>
 
         <div>
-          <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+          <label for="status" class="block text-sm font-medium text-gray-700">
+            {{ t('statusField') }}
+          </label>
           <select
             v-model="promoCode.status"
             id="status"
             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
           >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
+            <option value="active">{{ t('activeOption') }}</option>
+            <option value="inactive">{{ t('inactiveOption') }}</option>
           </select>
         </div>
 
@@ -84,7 +90,7 @@
           type="submit"
           class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
         >
-          Add Promo Code
+          {{ t('addPromoCodeButton') }}
         </button>
       </form>
     </div>
@@ -95,6 +101,9 @@
 import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import service from '@/services/utilsApiService'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = withDefaults(
   defineProps<{

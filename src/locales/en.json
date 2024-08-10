@@ -1,0 +1,15 @@
+{
+  "code": "code",
+  "awards": "awards",
+  "vote": "vote",
+  "addNewCodeButton": "Add new code",
+  "addNewCodeTitle": "Add New Code",
+  "promoCodeField": "Promo Code",
+  "awardDescriptionField": "Award Description",
+  "awardDetailsField": "Award Details",
+  "addDetailButton": "Add Detail",
+  "statusField": "Status",
+  "activeOption": "Active",
+  "inactiveOption": "Inactive",
+  "addPromoCodeButton": "Add Promo Code"
+}

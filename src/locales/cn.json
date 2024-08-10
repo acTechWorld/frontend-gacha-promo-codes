@@ -1,0 +1,15 @@
+{
+  "code": "代码",
+  "awards": "奖励",
+  "vote": "投票",
+  "addNewCodeButton": "添加新代码",
+  "addNewCodeTitle": "添加新代码",
+  "promoCodeField": "促销代码",
+  "awardDescriptionField": "奖励描述",
+  "awardDetailsField": "奖励详情",
+  "addDetailButton": "添加详情",
+  "statusField": "状态",
+  "activeOption": "有效",
+  "inactiveOption": "无效",
+  "addPromoCodeButton": "添加促销代码"
+}

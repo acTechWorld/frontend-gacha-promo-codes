@@ -1,0 +1,15 @@
+{
+  "code": "code",
+  "awards": "récompenses",
+  "vote": "vote",
+  "addNewCodeButton": "Ajouter un nouveau code",
+  "addNewCodeTitle": "Ajouter un nouveau code",
+  "promoCodeField": "Code Promo",
+  "awardDescriptionField": "Description de la Récompense",
+  "awardDetailsField": "Détails de la Récompense",
+  "addDetailButton": "Ajouter un Détail",
+  "statusField": "Statut",
+  "activeOption": "Actif",
+  "inactiveOption": "Inactif",
+  "addPromoCodeButton": "Ajouter le Code Promo"
+}
