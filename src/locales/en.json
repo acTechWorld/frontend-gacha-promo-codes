@@ -5,12 +5,12 @@
   "addNewCodeButton": "Add new code",
   "addNewCodeTitle": "Add New Code",
   "promoCodeField": "Promo Code",
-  "awardDescriptionField": "Award Description",
   "awardDetailsField": "Award Details",
-  "addDetailButton": "Add Detail",
   "statusField": "Status",
   "activeOption": "Active",
   "inactiveOption": "Inactive",
   "addPromoCodeButton": "Add Promo Code",
-  "defaultDescriptionTitle": "Share your Summoners Wars codes with the community"
+  "defaultDescriptionTitle": "Share your Summoners Wars codes with the community",
+  "awardNotInDbDetailAddButton": "Add a specific award",
+  "awardNotInDbDetailLabel": "Specifics Awards"
 }

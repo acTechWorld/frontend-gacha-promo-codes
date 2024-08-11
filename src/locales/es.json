@@ -5,12 +5,12 @@
   "addNewCodeButton": "Agregar nuevo código",
   "addNewCodeTitle": "Agregar nuevo código",
   "promoCodeField": "Código Promocional",
-  "awardDescriptionField": "Descripción de la Recompensa",
   "awardDetailsField": "Detalles de la Recompensa",
-  "addDetailButton": "Agregar Detalle",
   "statusField": "Estado",
   "activeOption": "Activo",
   "inactiveOption": "Inactivo",
   "addPromoCodeButton": "Agregar Código Promocional",
-  "defaultDescriptionTitle": "Comparte tus códigos de Summoners Wars con la comunidad"
+  "defaultDescriptionTitle": "Comparte tus códigos de Summoners Wars con la comunidad",
+  "awardNotInDbDetailAddButton": "Agregar un premio específico",
+  "awardNotInDbDetailLabel": "Premios específicos"
 }

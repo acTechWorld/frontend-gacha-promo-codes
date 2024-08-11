@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type Ref } from 'vue'
-import service from './services/utilsApiService'
+import service from './services/service'
 import { useStorage } from '@vueuse/core'
 import AddCodeForm from '@/components/AddCodeForm.vue'
-import type { Code } from './type/type'
+import type { AwardItem, Code } from './type/type'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useI18n } from 'vue-i18n'
 
@@ -35,11 +35,14 @@ const mappingApplications = {
 }
 
 const codes: Ref<Code[]> = ref([])
+const awardItems: Ref<AwardItem[]> = ref([])
 const displayAddCodeForm = ref(false)
 const isCopied = ref()
 const codeHover = ref()
 
-onMounted(() => getCodes())
+onMounted(async () => {
+  await Promise.all([getCodes(), getAwardItems()])
+})
 
 //COMPUTED
 const appInfos = computed(() => application && mappingApplications[application.toString()])
@@ -58,12 +61,14 @@ const handleClickAddCode = () => {
 
 const handleClickCopy = async (code: Code) => {
   try {
-    await navigator.clipboard.writeText(code.code)
-    if (timeoutCopy) clearTimeout(timeoutCopy)
-    isCopied.value = code.id
-    timeoutCopy = setTimeout(() => {
-      isCopied.value = undefined
-    }, 2000) // Reset after 2 seconds
+    if (code.status === 'active') {
+      await navigator.clipboard.writeText(code.code)
+      if (timeoutCopy) clearTimeout(timeoutCopy)
+      isCopied.value = code.id
+      timeoutCopy = setTimeout(() => {
+        isCopied.value = undefined
+      }, 2000) // Reset after 2 seconds
+    }
   } catch (error) {
     console.error('Failed to copy text:', error)
   }
@@ -98,8 +103,8 @@ const handlClickThumb = async (promoCode: Code, variation: 'plus' | 'minus') => 
       if (code.id && code.id === promoCode.id) {
         return {
           ...code,
-          upVote: code.upVote + numberUpvote,
-          downVote: code.downVote + numberDownvote
+          upVote: code.upVote + numberUpvote >= 0 ? code.upVote + numberUpvote : 0,
+          downVote: code.downVote + numberDownvote >= 0 ? code.downVote + numberDownvote : 0
         }
       } else {
         return code
@@ -110,8 +115,8 @@ const handlClickThumb = async (promoCode: Code, variation: 'plus' | 'minus') => 
     await service.updatePromoCode(
       {
         ...promoCode,
-        upVote: promoCode.upVote + numberUpvote,
-        downVote: promoCode.downVote + numberDownvote
+        upVote: promoCode.upVote + numberUpvote >= 0 ? promoCode.upVote + numberUpvote : 0,
+        downVote: promoCode.downVote + numberDownvote >= 0 ? promoCode.downVote + numberDownvote : 0
       },
       promoCode.id
     )
@@ -125,6 +130,13 @@ const getCodes = async () => {
   }
 }
 
+const getAwardItems = async () => {
+  if (application) {
+    const data = await service.getAllAwardItemsFromApplication(application?.toString() ?? '')
+    awardItems.value = data ?? []
+  }
+}
+
 const changeLocale = (event: Event) => {
   const target = event.target as HTMLSelectElement
   locale.value = target.value
@@ -135,7 +147,7 @@ const changeLocale = (event: Event) => {
 watch(
   () => application,
   async () => {
-    await getCodes()
+    await Promise.all([getCodes(), getAwardItems()])
   }
 )
 </script>
@@ -145,8 +157,10 @@ watch(
     <AddCodeForm
       v-if="displayAddCodeForm"
       :application="application?.toString()"
+      :awardItems="awardItems"
       class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
       @close="displayAddCodeForm = false"
+      @submit="getCodes()"
     />
     <select v-model="locale" @change="changeLocale">
       <option value="en">English</option>
@@ -184,8 +198,13 @@ watch(
                 :class="{ 'bg-[#2e2e5fdf]': codeHover === code.id }"
               >
                 <td
-                  class="w-[300px] cursor-pointer relative"
-                  @mouseenter="codeHover = code.id"
+                  class="w-[300px] relative"
+                  :class="{ 'cursor-pointer': code.status === 'active' }"
+                  @mouseenter="
+                    () => {
+                      if (code.status === 'active') codeHover = code.id
+                    }
+                  "
                   @mouseleave="codeHover = undefined"
                   @click="handleClickCopy(code)"
                 >
@@ -210,15 +229,14 @@ watch(
                   </div>
                 </td>
                 <td>
-                  <span v-if="code.awardDescription">
-                    {{ code.awardDescription }}
-                  </span>
                   <ul v-if="code.awardDetails?.length > 0" class="mt-2">
                     <li
                       v-for="(awardDetail, idxAward) in code.awardDetails"
                       :key="`code_${idxCode}_awardDetail_${idxAward}`"
+                      class="flex items-center"
                     >
-                      <span>- {{ awardDetail.label }}</span>
+                      <img v-if="awardDetail.image" :src="awardDetail.image" class="w-10 mr-2" />
+                      <span v-else class="mr-2">- {{ awardDetail.label }}</span>
                       <span> x{{ awardDetail.count }}</span>
                     </li>
                   </ul>
@@ -258,6 +276,7 @@ watch(
                       />
                     </div>
                     <div
+                      class="w-5"
                       :class="{
                         'text-green-500': code.upVote - code.downVote > 0,
                         'text-red-500': code.upVote - code.downVote < 0

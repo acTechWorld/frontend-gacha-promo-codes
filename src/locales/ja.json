@@ -5,12 +5,12 @@
   "addNewCodeButton": "新しいコードを追加",
   "addNewCodeTitle": "新しいコードを追加",
   "promoCodeField": "プロモーションコード",
-  "awardDescriptionField": "報酬の説明",
   "awardDetailsField": "報酬の詳細",
-  "addDetailButton": "詳細を追加",
   "statusField": "ステータス",
   "activeOption": "有効",
   "inactiveOption": "無効",
   "addPromoCodeButton": "プロモーションコードを追加",
-  "defaultDescriptionTitle": "召喚士戦争のコードをコミュニティと共有しましょう"
+  "defaultDescriptionTitle": "召喚士戦争のコードをコミュニティと共有しましょう",
+  "awardNotInDbDetailAddButton": "特定の報酬を追加",
+  "awardNotInDbDetailLabel": "特定の報酬"
 }

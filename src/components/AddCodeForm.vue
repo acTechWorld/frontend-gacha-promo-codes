@@ -23,23 +23,31 @@
         </div>
 
         <div>
-          <label for="awardDescription" class="block text-sm font-medium text-gray-700">
-            {{ t('awardDescriptionField') }}
-          </label>
-          <input
-            v-model="promoCode.awardDescription"
-            id="awardDescription"
-            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            required
-          />
-        </div>
-
-        <div>
           <label class="block text-sm font-medium text-gray-700">
             {{ t('awardDetailsField') }}
           </label>
+          <div class="grid grid-cols-3">
+            <div
+              v-for="(awardDetail, index) in awardDetailsInDb"
+              :key="index"
+              class="flex items-center space-x-2 mt-2"
+            >
+              <img class="w-10" :src="awardDetail.image" />
+              <input
+                v-model.number="awardDetail.count"
+                type="number"
+                placeholder="Count"
+                min="0"
+                class="block w-20 border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+          </div>
+          <div v-if="awardDetailsNotInDb.length > 0" class="mt-2">
+            {{ t('awardNotInDbDetailLabel') }}
+          </div>
           <div
-            v-for="(detail, index) in awardDetails"
+            v-for="(detail, index) in awardDetailsNotInDb"
             :key="index"
             class="flex items-center space-x-2 mt-2"
           >
@@ -67,7 +75,7 @@
             @click="addDetail"
             class="mt-3 w-fit inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
           >
-            {{ t('addDetailButton') }}
+            {{ t('awardNotInDbDetailAddButton') }}
           </button>
         </div>
 
@@ -98,29 +106,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import service from '@/services/utilsApiService'
+import service from '@/services/service'
 import { useI18n } from 'vue-i18n'
+import type { AwardItem } from '@/type/type'
 
 const { t } = useI18n()
 
 const props = withDefaults(
   defineProps<{
-    application: string
+    application?: string
+    awardItems?: AwardItem[]
   }>(),
-  { application: 'summonerWar' }
+  {
+    application: 'summonerWar',
+    awardItems: () => []
+  }
 )
 
 const promoCode = ref({
   code: '',
-  status: 'active',
-  awardDescription: ''
+  status: 'active'
 })
 
-const emits = defineEmits(['close'])
+const emits = defineEmits(['close', 'submit'])
 
-const awardDetails = ref([{ label: '', count: 0 }])
+const awardDetails: Ref<any[]> = ref(
+  props.awardItems.map((awardItem) => ({ ...awardItem, count: 0 }))
+)
 
 const addDetail = () => {
   awardDetails.value.push({ label: '', count: 0 })
@@ -130,23 +144,35 @@ const removeDetail = (index: number) => {
   awardDetails.value.splice(index, 1)
 }
 
+//COMPUTED
+const awardDetailsInDb = computed(() =>
+  awardDetails.value.filter((awardDetail) => awardDetail.id !== undefined)
+)
+
+const awardDetailsNotInDb = computed(() =>
+  awardDetails.value.filter((awardDetail) => awardDetail.id === undefined)
+)
+
+//METHODS
 const submitForm = async () => {
   try {
     const res = await service.createPromoCode({
       ...promoCode.value,
       upVote: 0,
       downVote: 0,
-      awardDetails: awardDetails.value.filter((item) => item.label),
+      awardDetails: awardDetails.value
+        .filter((item) => item.label && item.count > 0)
+        .map((item) => ({ count: item.count, label: item.label, awardItemId: item.id })),
       application: props.application
     })
 
     // Reset form
     promoCode.value.code = ''
-    promoCode.value.awardDescription = ''
-    awardDetails.value = [{ label: '', count: 0 }]
+    awardDetails.value = []
     promoCode.value.status = 'active'
 
     closeForm()
+    emits('submit')
   } catch (error) {
     console.error('Error adding promo code:', error)
   }
