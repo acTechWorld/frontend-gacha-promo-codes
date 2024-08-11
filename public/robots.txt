@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /private/
 Allow: /
-Sitemap: https://sumonners-war.gachacodes.com/sitemap.xml
+Sitemap: https://genshin-impact.gachacodes.com/sitemap.xml

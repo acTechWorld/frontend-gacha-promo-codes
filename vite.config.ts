@@ -8,8 +8,8 @@ export default defineConfig({
   plugins: [
     vue(),
     SitemapPlugin({
-      // base: 'https://genshin-impact.gachacodes.com',
-      base: 'https://summoners-war.gachacodes.com',
+      base: 'https://genshin-impact.gachacodes.com',
+      // base: 'https://summoners-war.gachacodes.com',
 
       // Optionally add more configurations
       options: {
