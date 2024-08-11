@@ -11,5 +11,6 @@
   "statusField": "Status",
   "activeOption": "Active",
   "inactiveOption": "Inactive",
-  "addPromoCodeButton": "Add Promo Code"
+  "addPromoCodeButton": "Add Promo Code",
+  "defaultDescriptionTitle": "Share your Summoners Wars codes with the community"
 }

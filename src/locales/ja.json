@@ -11,5 +11,6 @@
   "statusField": "ステータス",
   "activeOption": "有効",
   "inactiveOption": "無効",
-  "addPromoCodeButton": "プロモーションコードを追加"
+  "addPromoCodeButton": "プロモーションコードを追加",
+  "defaultDescriptionTitle": "召喚士戦争のコードをコミュニティと共有しましょう"
 }

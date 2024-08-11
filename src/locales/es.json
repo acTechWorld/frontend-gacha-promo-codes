@@ -11,5 +11,6 @@
   "statusField": "Estado",
   "activeOption": "Activo",
   "inactiveOption": "Inactivo",
-  "addPromoCodeButton": "Agregar Código Promocional"
+  "addPromoCodeButton": "Agregar Código Promocional",
+  "defaultDescriptionTitle": "Comparte tus códigos de Summoners Wars con la comunidad"
 }

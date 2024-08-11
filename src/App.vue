@@ -17,10 +17,20 @@ const listSessionVote: Ref<Storage[]> = useStorage(VOTED_CODES_KEY, [])
 const { t, locale } = useI18n()
 
 const mappingApplications = {
-  summonerWar: {
-    gameTitle: 'Summoner War',
-    description: 'Partagez vos codes summoners wars avec la communauté',
-    imgUrl: './summonerWarBgImage.jpg'
+  summonersWar: {
+    gameTitle: 'Summoners War',
+    descriptionKey: 'defaultDescriptionTitle',
+    imgUrl: './summonersWarBgImage.jpg'
+  },
+  genshinImpact: {
+    gameTitle: 'Genshin Impact',
+    descriptionKey: 'defaultDescriptionTitle',
+    imgUrl: './genshinImpactBgImage.webp'
+  },
+  honkaiStarRail: {
+    gameTitle: 'Honkai Star Rail',
+    descriptionKey: 'defaultDescriptionTitle',
+    imgUrl: './honkaiStarRailBgImage.jpg'
   }
 }
 
@@ -36,7 +46,7 @@ const appInfos = computed(() => application && mappingApplications[application.t
 
 const appStyle = computed(() => {
   return {
-    background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${appInfos.value.imgUrl}) no-repeat`,
+    background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${appInfos.value.imgUrl}) no-repeat`,
     backgroundSize: 'cover'
   }
 })
@@ -148,7 +158,7 @@ watch(
     <div class="mx-auto max-w-[1200px] w-full flex flex-col gap-20 text-white">
       <div class="appInfos text-center flex flex-col gap-2">
         <div class="font-semibold text-4xl">{{ appInfos.gameTitle }}</div>
-        <div class="font-medium text-lg">{{ appInfos.description }}</div>
+        <div class="font-medium text-lg">{{ t(appInfos.descriptionKey) }}</div>
       </div>
       <div class="flex flex-col w-full gap-2">
         <button
@@ -174,7 +184,7 @@ watch(
                 :class="{ 'bg-[#2e2e5fdf]': codeHover === code.id }"
               >
                 <td
-                  class="w-[200px] cursor-pointer relative"
+                  class="w-[300px] cursor-pointer relative"
                   @mouseenter="codeHover = code.id"
                   @mouseleave="codeHover = undefined"
                   @click="handleClickCopy(code)"
@@ -185,7 +195,7 @@ watch(
                       :class="code.status === 'active' ? 'text-green-500' : 'text-red-500'"
                     />
                     <span
-                      class="ml-2 max-w-[120px] break-all overflow-hidden line-clamp-3"
+                      class="ml-2 max-w-[220px] break-all overflow-hidden line-clamp-3"
                       :class="{ 'text-green-500': isCopied === code.id }"
                     >
                       {{ isCopied === code.id ? 'Copied!' : code.code }}

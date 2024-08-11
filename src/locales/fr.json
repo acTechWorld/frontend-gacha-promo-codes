@@ -11,5 +11,6 @@
   "statusField": "Statut",
   "activeOption": "Actif",
   "inactiveOption": "Inactif",
-  "addPromoCodeButton": "Ajouter le Code Promo"
+  "addPromoCodeButton": "Ajouter le Code Promo",
+  "defaultDescriptionTitle": "Partagez vos codes summoners wars avec la communauté"
 }
